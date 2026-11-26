@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#17121f">
+<title>MYWORKING Bingo 卡片生成器</title>
+<style>
+:root{--bg:#17121f;--panel:#241c30;--panel2:#2d223b;--purple:#9064e8;--purple2:#b49af4;--gold:#ffd166;--text:#fffaf2;--muted:#c9bfd3;--line:#514161;--red:#b83c35}
+*{box-sizing:border-box}body{margin:0;color:var(--text);background:radial-gradient(ellipse at 10% 0%,#39244f 0,transparent 40%),linear-gradient(150deg,#17121f,#21172b 60%,#15111c);font-family:system-ui,"Microsoft YaHei",sans-serif;min-height:100vh}
+.wrap{max-width:1180px;padding:28px 20px 60px;margin:auto}.brand{font-size:14px;letter-spacing:.16em;font-weight:900;color:var(--gold)}h1{margin:10px 0 8px;font-size:clamp(30px,5vw,46px);line-height:1.1}.intro{color:var(--muted);margin:0 0 24px;line-height:1.65}
+.layout{display:grid;grid-template-columns:minmax(280px,.9fr) minmax(350px,1.1fr);gap:18px;align-items:start}.panel{background:linear-gradient(145deg,#2a2037ee,#211a2cF5);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 18px 45px #07050b55}.panel h2{font-size:19px;margin:0 0 14px}.label{display:block;font-size:14px;font-weight:750;color:#eee5f4;margin:16px 0 7px}textarea,input,select{font:inherit;color:var(--text);background:#17121f;border:1px solid #645276;border-radius:11px;padding:11px 12px;width:100%;outline:none}textarea:focus,input:focus,select:focus{border-color:var(--purple2);box-shadow:0 0 0 3px #9064e833}textarea{min-height:220px;resize:vertical;line-height:1.65}.hint{font-size:13px;color:var(--muted);line-height:1.5;margin:7px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.check{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:14px;margin:14px 0}.check input{width:18px;height:18px;accent-color:var(--purple);margin:1px 0 0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}button{border:0;border-radius:999px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer;color:white;background:var(--purple);transition:.15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}button.secondary{background:#392d49;border:1px solid #69577f}button.print{background:var(--red)}.message{min-height:22px;margin:12px 0 0;color:var(--gold);font-size:14px}.preview-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.preview-head h2{margin:0}.cards-preview{display:flex;flex-direction:column;gap:16px;margin-top:16px}.print-page{display:grid;gap:12px;background:#fff;color:#18151b;padding:16px;border-radius:13px;box-shadow:0 10px 34px #05040a55}.print-page[data-per="4"]{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));aspect-ratio:210/297}.print-page[data-per="3"],.print-page[data-per="2"]{grid-template-columns:1fr}.bingo-card{min-width:0;display:flex;flex-direction:column;padding:5px 4px 8px;border:1px solid #d6d2dc;border-radius:7px;break-inside:avoid}.print-page[data-per="4"] .bingo-card{justify-content:center}.card-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;border-bottom:1.5px solid #302c33;padding:0 1px 5px;margin-bottom:6px}.card-title{font-size:clamp(14px,2vw,20px);font-weight:900;overflow-wrap:anywhere}.card-number{font-size:10px;color:#777;white-space:nowrap}.board{width:min(100%,125mm);aspect-ratio:1;margin:auto;display:grid;gap:2px;grid-template-columns:repeat(var(--n),minmax(0,1fr));grid-template-rows:repeat(var(--n),minmax(0,1fr))}.cell{border:1.5px solid #29252d;border-radius:5px;display:flex;align-items:center;justify-content:center;text-align:center;padding:3px;min-width:0;overflow:hidden;overflow-wrap:anywhere;font-size:clamp(10px,1.6vw,19px);font-weight:750;line-height:1.2;cursor:pointer}.cell.marked{background:#d8c8fa;color:#382259;box-shadow:inset 0 0 0 2px #8a62d4}.cell.free{background:#fff0bd}.empty{text-align:center;color:#aaa0b4;padding:32px 12px;border:1px dashed #6b597c;border-radius:14px;line-height:1.6}
+@media(max-width:800px){.wrap{padding:20px 14px 40px}.layout{grid-template-columns:1fr}.panel{padding:18px}.cards-preview{overflow:auto}.print-page{min-width:0}.print-page[data-per="4"]{aspect-ratio:auto;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto}.print-page[data-per="4"] .bingo-card{justify-content:flex-start}.print-page[data-per="4"] .board{width:100%}.board{width:min(100%,125mm)}}
+@page{size:A4 portrait;margin:10mm}
+@media print{body{background:#fff;color:#111}.wrap{max-width:none;padding:0;margin:0}.brand,.intro,.layout>.panel,.preview-head button,.preview-head h2{display:none!important}.layout{display:block}.layout>.panel:last-child{display:block!important;border:0;border-radius:0;padding:0;background:white;box-shadow:none}.preview-head{display:none}.cards-preview{display:block;margin:0}.print-page{width:190mm;height:277mm;padding:4mm;gap:3mm;border-radius:0;box-shadow:none;break-after:page;page-break-after:always;overflow:hidden}.print-page:last-child{break-after:auto;page-break-after:auto}.print-page[data-per="4"]{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));aspect-ratio:auto}.print-page[data-per="2"]{grid-template-columns:1fr;grid-template-rows:repeat(2,minmax(0,1fr))}.print-page[data-per="3"]{grid-template-columns:1fr;grid-template-rows:repeat(3,minmax(0,1fr))}.bingo-card{border-color:#aaa;border-radius:0;padding:2mm}.card-head{padding-bottom:2mm;margin-bottom:2mm}.card-title{font-size:14pt}.card-number{font-size:8pt}.board{width:min(100%,125mm);max-height:calc(100% - 10mm)}.print-page[data-per="4"] .board{width:min(100%,88mm)}.cell{border-radius:0;font-size:clamp(8pt,1.5vw,15pt);padding:1mm}.cell.marked{background:#fff!important;color:#111!important;box-shadow:none!important}.cell.free{background:#f4f0e8!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">MYWORKING · CLASSROOM GAMES</div>
+  <h1>Bingo 宾果卡生成器</h1>
+  <p class="intro">粘贴词语，为每位学生随机生成不同顺序的 Bingo 卡。可预览、点格标记，并按每页 2–4 张卡打印或另存为 PDF。</p>
+  <div class="layout">
+    <section class="panel" aria-labelledby="settings-title">
+      <h2 id="settings-title">设置词语和卡片</h2>
+      <label class="label" for="words">生词（每行一个）</label>
+      <textarea id="words" spellcheck="false" placeholder="你好&#10;谢谢&#10;老师&#10;学生&#10;苹果&#10;香蕉&#10;牛奶&#10;米饭&#10;朋友"></textarea>
+      <p class="hint">空行会忽略，重复词会自动去重。每张卡内不会重复；词语数量至少要满足格子数。</p>
+      <div class="row">
+        <div><label class="label" for="size">网格尺寸</label><select id="size"><option value="3">3 × 3</option><option value="4">4 × 4</option><option value="5" selected>5 × 5</option></select></div>
+        <div><label class="label" for="count">生成卡片数</label><input id="count" type="number" min="1" max="300" value="24"></div>
+      </div>
+      <div class="row">
+        <div><label class="label" for="perPage">每页打印卡数</label><select id="perPage"><option value="2">2 张</option><option value="3">3 张</option><option value="4" selected>4 张</option></select></div>
+        <div><label class="label" for="title">卡片标题（可选）</label><input id="title" type="text" placeholder="中文课 · Bingo!"></div>
+      </div>
+      <label class="check"><input id="free" type="checkbox"><span>奇数网格中央设为 FREE 免费格（只适用于 3×3 和 5×5）</span></label>
+      <div class="actions"><button id="generate">随机生成卡片</button><button class="secondary" id="clear">清空词语</button></div>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+    </section>
+    <section class="panel" aria-labelledby="preview-title">
+      <div class="preview-head"><h2 id="preview-title">卡片预览</h2><button class="print" id="print">打印 / 存成 PDF</button></div>
+      <div class="cards-preview" id="cards"><div class="empty">填写词语并点击“随机生成卡片”<br>每张卡的词语位置都会重新打乱。</div></div>
+    </section>
+  </div>
+</main>
+<script>
+(()=>{
+  const $=id=>document.getElementById(id),wordsEl=$('words'),sizeEl=$('size'),countEl=$('count'),perEl=$('perPage'),titleEl=$('title'),freeEl=$('free'),cardsEl=$('cards'),msg=$('message');
+  const sample=['你好','谢谢','老师','学生','苹果','香蕉','牛奶','米饭','朋友','学校','今天','明天','喜欢','学习','书','桌子','家','水','茶','再见','早上','晚上','中文','名字','天气'];
+  wordsEl.value=sample.join('\n');
+  const shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+  function getWords(){return [...new Set(wordsEl.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean))]}
+  function makeCard(words,n,free){const center=free&&n%2===1?Math.floor(n*n/2):-1;const chosen=shuffle(words).slice(0,n*n-(center>=0?1:0));const cells=[];let p=0;for(let i=0;i<n*n;i++)cells.push(i===center?'FREE':chosen[p++]);return cells}
+  function render(all,n,per){const title=titleEl.value.trim()||'Bingo!';cardsEl.replaceChildren();for(let start=0;start<all.length;start+=per){const page=document.createElement('div');page.className='print-page';page.dataset.per=String(per);for(let idx=start;idx<Math.min(start+per,all.length);idx++){const card=document.createElement('article');card.className='bingo-card';const head=document.createElement('div');head.className='card-head';const name=document.createElement('div');name.className='card-title';name.textContent=title;const num=document.createElement('div');num.className='card-number';num.textContent=`${idx+1} / ${all.length}`;head.append(name,num);const board=document.createElement('div');board.className='board';board.style.setProperty('--n',n);all[idx].forEach(word=>{const cell=document.createElement('div');cell.className='cell'+(word==='FREE'?' free marked':'');cell.textContent=word==='FREE'?'FREE':word;cell.addEventListener('click',()=>cell.classList.toggle('marked'));board.append(cell)});card.append(head,board);page.append(card)}cardsEl.append(page)}}
+  $('generate').addEventListener('click',()=>{const words=getWords(),n=Number(sizeEl.value),free=freeEl.checked&&n%2===1,needed=n*n-(free?1:0),count=Math.max(1,Math.min(300,Number(countEl.value)||1));if(words.length<needed){msg.textContent=`当前有 ${words.length} 个不同词语，至少需要 ${needed} 个。`;return}const all=[],seen=new Set();let tries=0;while(all.length<count&&tries<count*30){tries++;const card=makeCard(words,n,free),sig=JSON.stringify(card);if(!seen.has(sig)){seen.add(sig);all.push(card)}}if(all.length<count)msg.textContent=`已生成 ${all.length} 张不重复卡片（不同排列数量有限）。`;else msg.textContent=`已生成 ${all.length} 张卡片；每页 ${perEl.value} 张。点格子可预览标记效果。`;render(all,n,Number(perEl.value))});
+  $('clear').addEventListener('click',()=>{wordsEl.value='';msg.textContent='词语已清空。'});
+  $('print').addEventListener('click',()=>{if(!cardsEl.querySelector('.bingo-card')){msg.textContent='请先生成卡片。';return}window.print()});
+  perEl.addEventListener('change',()=>{const cards=[...cardsEl.querySelectorAll('.bingo-card')];if(!cards.length)return;const count=cards.length,n=Number(sizeEl.value),marked=cards.map(c=>[...c.querySelectorAll('.cell')].map(x=>x.textContent));render(marked,n,Number(perEl.value))});
+})();
+</script>
+</body>
+</html>
